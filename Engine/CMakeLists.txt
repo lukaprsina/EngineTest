@@ -1,5 +1,6 @@
 add_library(Engine SHARED    
     "src/Core/Application.cpp"
+    "src/Platform/GLFW/GLFWWindow.cpp"
     )
     
 target_include_directories(Engine
