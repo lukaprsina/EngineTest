@@ -1,4 +1,13 @@
+#include "Core/pch.h"
 #include "Core/Application.h"
+
+#include "Core/Window.h"
+#include "Backends/GLFW/GLFW.h"
+
+#include "Core/Renderer.h"
+#include "Renderers/OpenGL/OpenGL.h"
+
+#include <iostream>
 
 namespace eng
 {
@@ -10,11 +19,14 @@ namespace eng
     {
     }
 
-    void Application::Run()
+    void Application::Run(eng::ApplicationProps &AppProps)
     {
-        while (true)
-        {
-            std::cout << "Hello from app!\n";
-        }
+        std::cout << AppProps.GraphicsLibrary << '\n';
+        std::cout << AppProps.WindowLibrary << '\n';
+
+        OpenGL myOpenGL;
+        Renderer *myRenderer = &myOpenGL;
+
+        myRenderer->SayHello();
     }
 }

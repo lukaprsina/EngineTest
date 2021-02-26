@@ -1,10 +1,11 @@
 #pragma once
 
-extern eng::Application *eng::CreateApplication();
+#include "Core/Application.h"
 
 int main(int argc, char *argv[])
 {
-    auto app = eng::CreateApplication();
-    app->Run();
+    eng::ApplicationProps AppProps;
+    auto app = eng::CreateApplication(AppProps);
+    app->Run(AppProps);
     delete app;
 }
