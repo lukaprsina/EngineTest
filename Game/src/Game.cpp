@@ -1,5 +1,4 @@
 #include "Engine.h"
-#include <iostream>
 
 class Game : public eng::Application
 {
@@ -12,10 +11,10 @@ public:
     }
 };
 
-eng::Application *eng::CreateApplication(eng::ApplicationProps &AppProps)
+eng::Application *eng::CreateApplication(eng::ApplicationSettings &Settings)
 {
-    AppProps.GraphicsLibrary = GLDX11;
-    AppProps.WindowLibrary = WLWin32;
+    Settings.GraphicsLibrary = GraphicsLibraries::OpenGL;
+    Settings.WindowLibrary = WindowLibraries::GLFW;
 
     return new Game();
 }

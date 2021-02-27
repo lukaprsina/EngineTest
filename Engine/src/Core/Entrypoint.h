@@ -4,8 +4,8 @@
 
 int main(int argc, char *argv[])
 {
-    eng::ApplicationProps AppProps;
-    auto app = eng::CreateApplication(AppProps);
-    app->Run(AppProps);
+    eng::ApplicationSettings Settings;
+    auto app = eng::CreateApplication(Settings);
+    app->Run(Settings);
     delete app;
 }

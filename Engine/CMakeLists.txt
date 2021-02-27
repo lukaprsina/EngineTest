@@ -1,20 +1,31 @@
-add_library(Engine SHARED    
+add_library(Engine SHARED
     "src/Core/Application.cpp"
     "src/Backends/GLFW/GLFW.cpp"    
     "src/Renderers/OpenGL/OpenGL.cpp"
+    "src/Core/Log.cpp"
     )
     
 target_include_directories(Engine
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW/include
     INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/Glad/include
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW/include
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include
     )
-    
+
 target_precompile_headers(Engine
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/Core/pch.h
-    )
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/Core/pch.h
+	)
+
+target_link_libraries(Engine
+	PRIVATE glfw
+	PRIVATE Glad
+	PRIVATE spdlog::spdlog_header_only
+	)
 
 target_compile_definitions(Engine
 	PUBLIC ${ENG_PLATFORM}
+    PUBLIC ENG_ENABLE_ASSERTS
 	PRIVATE ENG_BUILD_DLL
+    PRIVATE GLFW_INCLUDE_NONE
 	)
