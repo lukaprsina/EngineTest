@@ -41,25 +41,50 @@ namespace eng
 
 	void Application::BringLayerForward(Layer *layer, unsigned int count)
 	{
+		if (count == 0)
+			return;
+
 		auto it = std::find(m_Layers.begin(), m_Layers.end(), layer);
 		if (it != m_Layers.end())
 		{
 			auto distance = it - m_Layers.begin();
-			m_Layers.erase(it);
 
-			m_Layers.insert(m_Layers.begin() + distance + count, layer);
+			unsigned int targetPosition = distance + count;
+
+			if (targetPosition < m_Layers.size())
+			{
+				m_Layers.erase(it);
+				m_Layers.insert(m_Layers.begin() + targetPosition, layer);
+			}
+			else
+			{
+				m_Layers.erase(it);
+				m_Layers.insert(m_Layers.end(), layer);
+			}
 		}
 	}
 
 	void Application::SendLayerBackward(Layer *layer, unsigned int count)
 	{
+		if (count == 0)
+			return;
+
 		auto it = std::find(m_Layers.begin(), m_Layers.end(), layer);
 		if (it != m_Layers.end())
 		{
 			auto distance = it - m_Layers.begin();
-			m_Layers.erase(it);
+			int targetPosition = distance - count;
 
-			m_Layers.insert(m_Layers.begin() + distance - count, layer);
+			if (targetPosition >= 0)
+			{
+				m_Layers.erase(it);
+				m_Layers.insert(m_Layers.begin() + targetPosition, layer);
+			}
+			else
+			{
+				m_Layers.erase(it);
+				m_Layers.insert(m_Layers.begin(), layer);
+			}
 		}
 	}
 }

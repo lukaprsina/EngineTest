@@ -35,6 +35,8 @@ namespace eng
         unsigned int Width = 1280;
         unsigned int Height = 920;
 
+        bool focused = true;
+
         std::function<void(Event &)> EventCallback;
     };
 

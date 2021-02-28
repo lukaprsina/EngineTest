@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Core/Window.h"
 #include "Core/pch.h"
+#include "Core/Window.h"
 #include "Core/Base.h"
 #include "Core/Layer.h"
 
 #include "Events/Event.h"
+#include "Events/ApplicationEvent.h"
 
 namespace eng
 {
@@ -30,6 +31,7 @@ namespace eng
 
     private:
         bool m_Running = true;
+        bool OnWindowClose(WindowCloseEvent &e);
         std::vector<Layer *> m_Layers;
     };
 

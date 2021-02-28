@@ -24,10 +24,14 @@ namespace eng
 
     Application::~Application()
     {
+        ENG_CORE_TRACE("Destroying the Application class...");
     }
 
     void Application::OnEvent(Event &e)
     {
+        EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+
         for (auto it = m_Layers.end(); it != m_Layers.begin();)
         {
             (*--it)->OnEvent(e);
@@ -38,7 +42,7 @@ namespace eng
 
     void Application::Run(eng::ApplicationSettings &Settings)
     {
-        ENG_CORE_TRACE("Created an Application class and initialized spdlog.");
+        ENG_CORE_TRACE("Running the Application.");
         Window *myWindow;
         GLFW GLFWBackend;
 
@@ -77,6 +81,7 @@ namespace eng
         ENG_CORE_TRACE("Initializing the window library...");
         myWindow->Init(Settings);
         myWindow->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+        ENG_CORE_TRACE("Set the event callback.");
 
         while (m_Running)
         {
@@ -86,5 +91,12 @@ namespace eng
             for (Layer *layer : m_Layers)
                 layer->OnUpdate();
         }
+    }
+
+    bool Application::OnWindowClose(WindowCloseEvent &e)
+    {
+        ENG_CORE_TRACE("Closing the window...");
+        m_Running = false;
+        return true;
     }
 }

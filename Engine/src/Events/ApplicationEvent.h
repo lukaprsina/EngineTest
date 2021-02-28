@@ -6,19 +6,87 @@
 namespace eng
 {
 
+    class ENG_API WindowCloseEvent : public Event
+    {
+    public:
+        WindowCloseEvent() {}
+
+        std::string ToString() const override
+        {
+            std::stringstream ss;
+            ss << "WindowCloseEvent";
+            return ss.str();
+        }
+
+        EVENT_CLASS_TYPE(WindowClose)
+        EVENT_CLASS_CATEGORY(EventCategoryApplication)
+    };
+
     class ENG_API WindowResizeEvent : public Event
     {
     public:
         WindowResizeEvent(unsigned int width, unsigned int height)
             : m_Width(width), m_Height(height) {}
-        std::string ToString() const { return "Window Resize event"; };
 
+        inline unsigned int GetWidth() const { return m_Width; }
+        inline unsigned int GetHeight() const { return m_Height; }
+
+        std::string ToString() const override
+        {
+            std::stringstream ss;
+            ss << "WindowResizeEvent: " << m_Width << ", " << m_Height;
+            return ss.str();
+        }
+
+        EVENT_CLASS_TYPE(WindowResize)
+        EVENT_CLASS_CATEGORY(EventCategoryApplication)
     private:
         unsigned int m_Width, m_Height;
     };
 
-    class ENG_API WindowCloseEvent : public Event
+    class ENG_API WindowFocusedEvent : public Event
     {
     public:
+        WindowFocusedEvent(int focused)
+            : m_Focused((bool)focused)
+        {
+        }
+
+        std::string ToString() const override
+        {
+            std::stringstream ss;
+            const char *description = (m_Focused) ? "Focus gained." : "Focus lost.";
+
+            ss << "WindowFocusedEvent: " << description;
+            return ss.str();
+        }
+
+        EVENT_CLASS_TYPE(WindowFocus)
+        EVENT_CLASS_CATEGORY(EventCategoryApplication)
+
+    private:
+        bool m_Focused;
+    };
+
+    class ENG_API WindowMovedEvent : public Event
+    {
+    public:
+        WindowMovedEvent(int XPositon, int YPosition)
+            : m_XPosition(XPositon), m_YPosition(YPosition) {}
+
+        inline int GetXPosition() const { return m_XPosition; }
+        inline int GetYPosition() const { return m_YPosition; }
+
+        std::string ToString() const override
+        {
+            std::stringstream ss;
+            ss << "WindowMovedEvent: " << m_XPosition << ", " << m_YPosition;
+            return ss.str();
+        }
+
+        EVENT_CLASS_TYPE(WindowMoved)
+        EVENT_CLASS_CATEGORY(EventCategoryApplication)
+    private:
+        int m_XPosition, m_YPosition;
     };
 } // namespace eng
