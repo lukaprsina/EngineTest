@@ -2,12 +2,16 @@
 
 #include "Backends/GLFW/GLFW.h"
 #include "Core/Log.h"
+#include "Events/ApplicationEvent.h"
+#include "Events/MouseEvent.h"
+#include "Events/KeyEvent.h"
 
 #include <glad/glad.h>
 
 namespace eng
 {
     static bool s_GLFWInitialized = false;
+
     static void GLFWErrorCallback(int error, const char *description)
     {
         ENG_CORE_ERROR("GLFW Error [{0}]: {1}", error, description);
@@ -16,10 +20,9 @@ namespace eng
     void GLFW::Init(ApplicationSettings Settings)
     {
         ENG_CORE_TRACE("Initializing GLFW...");
-
         if (s_GLFWInitialized)
         {
-            ENG_CORE_ERROR("GLFW already initialized!");
+            ENG_CORE_TRACE("GLFW already initialized.");
         }
         else
         {
@@ -48,6 +51,15 @@ namespace eng
         }
 
         glfwSetWindowUserPointer(m_Window, &m_WindowSettings);
+
+        glfwSetWindowSizeCallback(m_Window, [](GLFWwindow *window, int width, int height) {
+            WindowSettings &data = *(WindowSettings *)glfwGetWindowUserPointer(window);
+            data.Width = width;
+            data.Height = height;
+
+            WindowResizeEvent event(width, height);
+            data.EventCallback(event);
+        });
     }
 
     void GLFW::Shutdown()

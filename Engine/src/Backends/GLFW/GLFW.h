@@ -15,7 +15,10 @@ namespace eng
         virtual void Shutdown() override;
         virtual void OnUpdate() override;
 
+        inline void SetEventCallback(const std::function<void(Event &)> &callback) override { m_WindowSettings.EventCallback = callback; }
+
     private:
         GLFWwindow *m_Window;
+        WindowSettings m_WindowSettings;
     };
 }

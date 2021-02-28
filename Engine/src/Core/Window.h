@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Core/Base.h"
+#include "Events/Event.h"
+
 namespace eng
 {
     enum class WindowLibraries
@@ -19,11 +22,20 @@ namespace eng
 
     struct ApplicationSettings
     {
-        std::string Title = "Untitled Project";
+        std::string Title = "Engine";
         unsigned int Width = 1280;
         unsigned int Height = 920;
         WindowLibraries WindowLibrary = WindowLibraries::GLFW;
         GraphicsLibraries GraphicsLibrary = GraphicsLibraries::OpenGL;
+    };
+
+    struct WindowSettings
+    {
+        std::string Title = "Engine";
+        unsigned int Width = 1280;
+        unsigned int Height = 920;
+
+        std::function<void(Event &)> EventCallback;
     };
 
     class Window
@@ -33,14 +45,6 @@ namespace eng
         virtual void Shutdown() = 0;
         virtual void OnUpdate() = 0;
 
-    protected:
-        struct WindowSettings
-        {
-            std::string Title = "Untitled Project";
-            unsigned int Width = 1280;
-            unsigned int Height = 920;
-        };
-
-        WindowSettings m_WindowSettings;
+        virtual void SetEventCallback(const std::function<void(Event &)> &callback) = 0;
     };
 }

@@ -1,27 +1,43 @@
 #include "Core/pch.h"
 
-#include "Core/Application.h"
 #include "Core/Log.h"
 
 #include "Core/Window.h"
 #include "Backends/GLFW/GLFW.h"
 
+#include "Events/ApplicationEvent.h"
+
 #include "Core/Renderer.h"
 #include "Renderers/OpenGL/OpenGL.h"
+
+#include <glad/glad.h>
+
+#define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
 
 namespace eng
 {
     Application::Application()
     {
+        Log::Init();
+        ENG_CORE_TRACE("Creating an Application class...");
     }
 
     Application::~Application()
     {
     }
 
+    void Application::OnEvent(Event &e)
+    {
+        for (auto it = m_Layers.end(); it != m_Layers.begin();)
+        {
+            (*--it)->OnEvent(e);
+            if (e.Handled)
+                break;
+        }
+    }
+
     void Application::Run(eng::ApplicationSettings &Settings)
     {
-        Log::Init();
         ENG_CORE_TRACE("Created an Application class and initialized spdlog.");
         Window *myWindow;
         GLFW GLFWBackend;
@@ -60,8 +76,15 @@ namespace eng
 
         ENG_CORE_TRACE("Initializing the window library...");
         myWindow->Init(Settings);
-        while (true)
+        myWindow->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+
+        while (m_Running)
         {
+            glClearColor(1, 0, 1, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
+            myWindow->OnUpdate();
+            for (Layer *layer : m_Layers)
+                layer->OnUpdate();
         }
     }
 }

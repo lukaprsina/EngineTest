@@ -3,6 +3,8 @@ add_library(Engine SHARED
     "src/Backends/GLFW/GLFW.cpp"    
     "src/Renderers/OpenGL/OpenGL.cpp"
     "src/Core/Log.cpp"
+    "src/Core/Layer.cpp"
+    "src/Core/LayerStack.cpp"
     )
     
 target_include_directories(Engine
